@@ -18,4 +18,7 @@ class ofApp : public ofBaseApp {
   
     // Collection of bell sounds.
     vector<ofSoundPlayer> _bells;
+  
+    // Max connections. 
+    const int maxConnections = 30;
 };

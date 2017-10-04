@@ -18,5 +18,5 @@ class Connection {
     // Connection variables to define visual state.
     ofPoint position;
     int radius;
-    ofColor color; 
+    ofColor color;
 };

@@ -26,6 +26,18 @@ void ofApp::setup(){
 
 //--------------------------------------------------------------
 void ofApp::update(){
+  
+  // If the connections increase a certain number, empty the array
+  // and clear the screen.
+  if (_connections.size() > maxConnections) {
+    _connections.clear();
+    
+    // Clear the screen.
+    ofSetColor(0);
+    ofFill();
+    ofDrawRectangle(0, 0, ofGetWidth(), ofGetHeight());
+  }
+  
   // Update each connection.
   for (int i = 0; i < _connections.size(); i++) {
     _connections[i].update();
