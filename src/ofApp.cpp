@@ -65,6 +65,8 @@ void ofApp::keyPressed(int key){
     c.setup(connectionBell);
     _connections.push_back(c);
   }
+  
+  // Algorithm to ignore multiple key press events for the same key. 
 }
 
 //--------------------------------------------------------------
