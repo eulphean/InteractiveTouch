@@ -29,6 +29,3 @@ pdsp::Patchable& TouchOscillator::in_trig(){
 pdsp::Patchable& TouchOscillator::in_pitch(){
     return in("pitch");
 }
-pdsp::Patchable& TouchOscillator::out_signal(){
-    return out("signal");
-}

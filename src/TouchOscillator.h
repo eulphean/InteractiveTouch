@@ -15,7 +15,10 @@ class TouchOscillator : public pdsp::Patchable{
     
         pdsp::Patchable& in_trig();
         pdsp::Patchable& in_pitch();
-        pdsp::Patchable& out_signal();
+        /*pdsp::Patchable& out_sin();
+        pdsp::Patchable& out_saw();
+        pdsp::Patchable& out_triangle();
+        pdsp::Patchable& out_pulse();*/
     
     // Characteristics of this oscillator. 
     private:
