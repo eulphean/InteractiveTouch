@@ -17,9 +17,9 @@ void TouchOscillator::patch() {
     
     //patching
     env.set(0.0f, 50.0f, 1.0f, 50.0f) >> amp.in_mod();
-    osc.out_sine() >> amp;
     
-    // TODO: Patch LFO to the duration of the touch.
+    // Default output patched is a sine wave.
+    osc.out_sine() >> amp;
 }
 
 pdsp::Patchable& TouchOscillator::in_trig(){
@@ -28,4 +28,24 @@ pdsp::Patchable& TouchOscillator::in_trig(){
 
 pdsp::Patchable& TouchOscillator::in_pitch(){
     return in("pitch");
+}
+
+pdsp::Patchable& TouchOscillator::out_sin(){
+    osc.out_sine() >> amp;
+    return out("signal");
+}
+
+pdsp::Patchable& TouchOscillator::out_saw(){
+    osc.out_saw() >> amp;
+    return out("signal");
+}
+
+pdsp::Patchable& TouchOscillator::out_triangle(){
+    osc.out_triangle() >> amp;
+    return out("signal");
+}
+
+pdsp::Patchable& TouchOscillator::out_pulse(){
+    osc.out_pulse() >> amp;
+    return out("signal");
 }

@@ -31,9 +31,8 @@ Sequencer::Sequencer() {
     // arguments are: index, pointer to pdsp::ScoreCell or pdsp::Sequence, pointer to pdsp::CellChange
     
     // Output for the oscillator to the engine audio.
-    // osc * 0.5f >> engine.audio_out(0);
-    // osc * 0.5f >> engine.audio_out(1);
-    //osc.out_signal(1) * 0.5f >> engine.audio_out(0);
+    osc.out_pulse() * 0.5f >> engine.audio_out(0);
+    osc.out_pulse() * 0.5f >> engine.audio_out(1);
     
     //------------SETUPS AND START AUDIO-------------
     engine.listDevices();

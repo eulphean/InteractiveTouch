@@ -16,14 +16,11 @@ class Sequencer : public pdsp::Patchable {
         TouchOscillator osc;
         pdsp::Sequence sequence;
     
-    
         // Setup the squencer in this constructor.
         Sequencer();
     
         // Launch a specific sequence when a key command is received. 
         void launchSequence();
-    
-        void playOscillator();
 
     private:
         ofxPDSPEngine engine;
