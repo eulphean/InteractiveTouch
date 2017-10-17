@@ -13,9 +13,6 @@
 class Sequencer : public pdsp::Patchable {
     
     public:
-        TouchOscillator osc;
-        pdsp::Sequence sequence;
-    
         // Setup the squencer in this constructor.
         Sequencer();
     
@@ -24,5 +21,7 @@ class Sequencer : public pdsp::Patchable {
 
     private:
         ofxPDSPEngine engine;
-    
+        pdsp::Sequence sequence;
+        TouchOscillator osc;
+        TouchLFO lfo;
 };

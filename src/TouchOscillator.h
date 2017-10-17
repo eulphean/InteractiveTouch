@@ -13,11 +13,11 @@ class TouchOscillator : public pdsp::Patchable{
         TouchOscillator(const TouchOscillator & other) { patch(); }
         void patch();
     
-        // Input
+        // Inputs
         pdsp::Patchable& in_trig();
         pdsp::Patchable& in_pitch();
     
-        // Output
+        // Outputs
         pdsp::Patchable& out_sin();
         pdsp::Patchable& out_saw();
         pdsp::Patchable& out_triangle();

@@ -17,7 +17,6 @@ Sequencer::Sequencer() {
     engine.score.sections[0].out_trig(0) >> osc.in("trig"); // first output is patched to envelope
     engine.score.sections[0].out_value(1) >> osc.in("pitch"); // second output is patched to pitch
 
-   
     // Create sequences for individual sections.
     float o = -1.0f;
     sequence.set(
