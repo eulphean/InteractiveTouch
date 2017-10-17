@@ -1,24 +1,30 @@
 #pragma once
 
 #include "ofMain.h"
-#include "ConnectionsManager.h"
+#include "ofxPDSP.h"
 #include "Connection.h"
+#include "Sequencer.h"
 
 class ofApp : public ofBaseApp {
 	public:
-		void setup();
+    
+    // ---------------- Constants -----------------------
+    const int maxConnections = 20;
+    
+    // ---------------- Members -----------------------
+    
+    // Collection of Connections.
+    vector<Connection> connections;
+    
+    // PDSP handler.
+    Sequencer sequencer;
+  
+    // ---------------- Methods -----------------------
+    void setup();
 		void update();
 		void draw();
-
+  
+    // Events received by the Makey.
 		void keyPressed(int key);
 		void mousePressed(int x, int y, int button);
-  
-    // Collection of Connections.
-    vector<Connection> _connections;
-  
-    // Collection of bell sounds.
-    vector<ofSoundPlayer> _bells;
-  
-    // Max connections. 
-    const int maxConnections = 30;
 };

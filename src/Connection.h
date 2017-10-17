@@ -11,7 +11,7 @@
 class Connection {
   
 	public:
-		void setup(ofSoundPlayer sound);
+		void setup();
 		void update();
 		void draw();
   

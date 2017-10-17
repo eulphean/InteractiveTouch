@@ -1,0 +1,28 @@
+// Author: Amay Kataria
+// Date: 10/16/2017
+// Description: Declares a TouchOscillator class, which is responsible to play an oscillating
+// sample when a connection happens. This could be a sin, square or a triangle wave.
+
+#pragma once
+
+#include "ofxPDSP.h"
+
+class TouchOscillator : public pdsp::Patchable{
+    public:
+        TouchOscillator();
+        TouchOscillator(const TouchOscillator & other) { patch(); }
+        void patch();
+    
+        pdsp::Patchable& in_trig();
+        pdsp::Patchable& in_pitch();
+        pdsp::Patchable& out_signal();
+    
+    // Characteristics of this oscillator. 
+    private:
+        pdsp::Amp amp;
+        pdsp::VAOscillator osc;
+        pdsp::ADSR env;
+        pdsp::PRNoiseGen noise;
+        pdsp::LFO lfo;
+        
+};
