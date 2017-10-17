@@ -8,20 +8,22 @@
 #include "ofMain.h"
 #include "ofxPDSP.h"
 #include "TouchOscillator.h"
+#include "TouchLFO.h"
 
-// Responsible for
 class Sequencer : public pdsp::Patchable {
     
     public:
+        const int maxSections = 4;
+    
         // Setup the squencer in this constructor.
         Sequencer();
     
         // Launch a specific sequence when a key command is received. 
-        void launchSequence();
+        void launchSequence(int key);
 
     private:
         ofxPDSPEngine engine;
-        pdsp::Sequence sequence;
-        TouchOscillator osc;
-        TouchLFO lfo;
+        vector<pdsp::Sequence> sequences;
+        vector<TouchOscillator> oscs;
+        vector<TouchLFO> lfos;
 };

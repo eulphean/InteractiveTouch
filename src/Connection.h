@@ -11,7 +11,8 @@
 class Connection {
   
 	public:
-		void setup();
+    Connection();
+    
 		void update();
 		void draw();
   

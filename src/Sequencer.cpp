@@ -9,30 +9,72 @@ Sequencer::Sequencer() {
     //--------PATCHING-------
     engine.score.setTempo (90.0f);
     
-    engine.score.sections.resize(1); // by default we have 0 sections, we need 1
+    engine.score.sections.resize(maxSections); // by default we have 0 sections, we need 4
+    
+    // Currently, we have the same number of oscillators as the number of sections because each
+    // section is driven by a unique oscillator output type.
+    oscs.resize(maxSections);
+    lfos.resize(maxSections);
+    
+    // Unique sequence for each section.
+    sequences.resize(maxSections);
 
     // we patch our section to our synth
     // in out_trig() or out_value() you pass the output number (or 0 if you don't give an argument)
     // you can't use both out_trig() and out_value() for the same output number
-    engine.score.sections[0].out_trig(0) >> osc.in("trig"); // first output is patched to envelope
-    engine.score.sections[0].out_value(1) >> osc.in("pitch"); // second output is patched to pitch
-
-    // Create sequences for individual sections.
+    for (int i = 0; i < maxSections; i++) {
+        engine.score.sections[i].out_trig(0) >> oscs[i].in_trig(); // first output is patched to envelope
+        engine.score.sections[i].out_value(1) >> oscs[i].in_pitch(); // second output is patched to pitch
+    }
+    
+    // Sequences for individual sections. 
     float o = -1.0f;
-    sequence.set(
+    sequences[0].set(
       { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
-        { 50.0f, o, o, o, 70.0f, o, o, o }}, // out 1 = pitch
-                 16.0, 1.0 ); 
+        { 60.0f, o, o, o, o, o, o, o }}, // out 1 = pitch
+                 16.0, 1.0 );
+    
+    sequences[1].set(
+      { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
+        { o, o, o, 30.0f, o, o, o, o }}, // out 1 = pitch
+                 16.0, 1.0 );
+    
+    sequences[2].set(
+      { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
+        { o, 50.0f, o, o, o, o, o, o }}, // out 1 = pitch
+                 16.0, 1.0 );
+    
+    sequences[3].set(
+      { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
+        { 60.f, o, o, 70.0f, o, o, o, 40.0f}}, // out 1 = pitch
+                 16.0, 1.0 );
     
     // Assign a sequence to a section and a cell.
     // Number of sequences/section = Number of cells.
-    engine.score.sections[0].setCell(0, &sequence, pdsp::Behavior::Loop);
-    // arguments are: index, pointer to pdsp::ScoreCell or pdsp::Sequence, pointer to pdsp::CellChange
+    for (int i = 0; i < maxSections; i++) {
+        engine.score.sections[i].setCell(0, &sequences[i], pdsp::Behavior::Loop);
+    }
     
-    // Output for the oscillator to the engine audio.
-    osc.out_pulse() * 0.5f >> engine.audio_out(0);
-    osc.out_pulse() * 0.5f >> engine.audio_out(1);
+    // LFO for each oscillator.
+    //lfos[0].out_square() * 0.5f >> oscs[0].in_pitch();
+    //lfos[1].out_triangle() * 0.5f >> oscs[1].in_pitch();
+    //lfos[2].out_sin() * 0.5f >> oscs[2].in_pitch();
+    //lfos[3].out_saw() * 0.5f >> oscs[3].in_pitch();
     
+    // Every oscillator's output.
+    oscs[0].out_sin() * 0.5f >> engine.audio_out(0);
+    oscs[0].out_sin() * 0.5f >> engine.audio_out(1);
+    
+    oscs[1].out_sin() * 0.5f >> engine.audio_out(0);
+    oscs[1].out_sin() * 0.5f >> engine.audio_out(1);
+    
+    oscs[2].out_sin() * 0.5f >> engine.audio_out(0);
+    oscs[2].out_sin() * 0.5f >> engine.audio_out(1);
+    
+    oscs[3].out_sin() * 0.5f >> engine.audio_out(0);
+    oscs[3].out_sin() * 0.5f >> engine.audio_out(1);
+
+
     //------------SETUPS AND START AUDIO-------------
     engine.listDevices();
     engine.setDeviceID(1); 
@@ -41,6 +83,26 @@ Sequencer::Sequencer() {
 
 
 // Based on the input received from the Makey, we will launch a sequence.
-void Sequencer::launchSequence() {
-    engine.score.sections[0].launchCell(0);
+void Sequencer::launchSequence(int key) {
+    switch(key) {
+        case 49:
+            engine.score.sections[0].launchCell(0);
+            break;
+        
+        case 50:
+            engine.score.sections[1].launchCell(0);
+            break;
+            
+        case 51:
+            engine.score.sections[0].launchCell(0);
+            break;
+            
+        case 52:
+            engine.score.sections[3].launchCell(0);
+            break;
+            
+        default:
+            break;
+    }
+    
 }

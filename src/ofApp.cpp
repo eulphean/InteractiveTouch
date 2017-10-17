@@ -43,11 +43,11 @@ void ofApp::draw(){
 void ofApp::keyPressed(int key){
   // Key pressed?
   if (key) {
+    // Launch the correct sequence for this command.
+    sequencer.launchSequence(key);
+    
+    // Create a new connection and add it to the collection.
     Connection c;
-    //sequencer.playOscillator();
-    sequencer.launchSequence();
-    // Setup the connection.
-    c.setup();
     connections.push_back(c);
   }
 }
