@@ -21,7 +21,7 @@ class Sequencer : public pdsp::Patchable {
         Sequencer();
     
         // Launch a specific sequence when a key command is received. 
-        void launchSequence(int key);
+        void launchSequence(int key, int numOfConnections);
         void drawGui();
 
     private:

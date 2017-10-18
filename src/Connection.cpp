@@ -22,5 +22,4 @@ void Connection::draw() {
   ofSetColor(color);
   ofFill();
   ofDrawCircle(position, radius);
-  
 }

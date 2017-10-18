@@ -17,7 +17,14 @@ void ofApp::update(){
   // If the connections increase a certain number, empty the array
   // and clear the screen.
   if (connections.size() > maxConnections) {
+  
+    // Save the last connection.
+    Connection lastConnection = connections.at(connections.size() - 1);
+    
     connections.clear();
+    
+    // Push back the last connection.
+    connections.push_back(lastConnection);
     
     // Clear the screen.
     ofSetColor(0);
@@ -47,15 +54,10 @@ void ofApp::keyPressed(int key){
   // Key pressed?
   if (key) {
     // Launch the correct sequence for this command.
-    sequencer.launchSequence(key);
+    sequencer.launchSequence(key, connections.size() + 1);
     
     // Create a new connection and add it to the collection.
     Connection c;
     connections.push_back(c);
   }
-}
-
-//--------------------------------------------------------------
-void ofApp::mousePressed(int x, int y, int button){
-
 }

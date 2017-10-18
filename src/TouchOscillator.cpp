@@ -10,12 +10,12 @@ TouchOscillator::TouchOscillator() {
 }
 
 void TouchOscillator::patch() {
-    //add inputs / outputs with these methods
+    // Add inputs / outputs with these methods
     addModuleInput("trig", env.in_trig()); // arguments are tag and the Unit in/out to link to that tag
     addModuleInput("pitch", osc.in_pitch());
     addModuleOutput("signal", amp); // if in/out is not selected default in/out is used
     
-    //patching
+    // Patching
     env.set(0.0f, 50.0f, 1.0f, 50.0f) >> amp.in_mod();
     
     // Default output patched is a sine wave.

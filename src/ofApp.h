@@ -9,7 +9,7 @@ class ofApp : public ofBaseApp {
 	public:
     
     // ---------------- Constants -----------------------
-    const int maxConnections = 20;
+    const int maxConnections = 4;
     
     // ---------------- Members -----------------------
     
@@ -26,5 +26,4 @@ class ofApp : public ofBaseApp {
   
     // Events received by the Makey.
 		void keyPressed(int key);
-		void mousePressed(int x, int y, int button);
 };
