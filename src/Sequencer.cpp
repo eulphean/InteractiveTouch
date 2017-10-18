@@ -32,12 +32,12 @@ Sequencer::Sequencer() {
     sequences[0].set(
       { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
         { 60.0f, o, o, o, o, o, o, o }}, // out 1 = pitch
-                 16.0, 1.0 );
+                 16.0, 2.0 );
     
     sequences[1].set(
       { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
         { o, o, o, 30.0f, o, o, o, o }}, // out 1 = pitch
-                 16.0, 1.0 );
+                 16.0, 2.0 );
     
     sequences[2].set(
       { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
@@ -45,9 +45,9 @@ Sequencer::Sequencer() {
                  16.0, 1.0 );
     
     sequences[3].set(
-      { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
-        { 60.f, o, o, 70.0f, o, o, o, 40.0f}}, // out 1 = pitch
-                 16.0, 1.0 );
+      { { 1.0f, o, o, 1.0f , o, o, o, 1.0f },  // out 0 = gate
+        { 60.f, o, o, 55.0f, o, o, o, 50.0f}}, // out 1 = pitch
+                 16.0, 2.0 );
     
     // Assign a sequence to a section and a cell.
     // Number of sequences/section = Number of cells.
@@ -56,8 +56,11 @@ Sequencer::Sequencer() {
     }
     
     // LFO for each oscillator.
-    //lfos[0].out_square() * 0.5f >> oscs[0].in_pitch();
-    //lfos[1].out_triangle() * 0.5f >> oscs[1].in_pitch();
+    for (int i = 0; i < maxSections; i++) {
+        lfos[i].out_square() >> oscs[i].in_pitch();
+    }
+    // lfos[0].out_square() * 0.5f >> oscs[0].in_pitch();
+    // lfos[1].out_triangle() * 0.5f >> oscs[1].in_pitch();
     //lfos[2].out_sin() * 0.5f >> oscs[2].in_pitch();
     //lfos[3].out_saw() * 0.5f >> oscs[3].in_pitch();
     
@@ -74,13 +77,33 @@ Sequencer::Sequencer() {
     oscs[3].out_sin() * 0.5f >> engine.audio_out(0);
     oscs[3].out_sin() * 0.5f >> engine.audio_out(1);
 
-
+    // Initialize Gui
+    initSequencerGui();
+    
     //------------SETUPS AND START AUDIO-------------
     engine.listDevices();
     engine.setDeviceID(1); 
     engine.setup(44100, 512, 3);
 }
 
+void Sequencer::initSequencerGui() {
+    gui.setup("Interactive Touch");
+    
+    lfo_ctrls.resize(maxSections);
+    
+    // Map gui controls.
+    for (int i = 0; i < maxSections; i++) {
+        lfo_ctrls[i] >> lfos[i].in_freq();
+        lfo_group.add(lfo_ctrls[i].set("LFO " + to_string(i), 0.0f, 0.0f, 20.0f));
+    }
+
+    gui.add(lfo_group);
+    gui.setPosition(5, 5);
+}
+
+void Sequencer::drawGui() {
+    gui.draw();
+}
 
 // Based on the input received from the Makey, we will launch a sequence.
 void Sequencer::launchSequence(int key) {
@@ -94,7 +117,7 @@ void Sequencer::launchSequence(int key) {
             break;
             
         case 51:
-            engine.score.sections[0].launchCell(0);
+            engine.score.sections[2].launchCell(0);
             break;
             
         case 52:
@@ -104,5 +127,4 @@ void Sequencer::launchSequence(int key) {
         default:
             break;
     }
-    
 }

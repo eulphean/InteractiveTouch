@@ -9,6 +9,8 @@
 #include "ofxPDSP.h"
 #include "TouchOscillator.h"
 #include "TouchLFO.h"
+#include "ofxGui.h"
+
 
 class Sequencer : public pdsp::Patchable {
     
@@ -20,10 +22,18 @@ class Sequencer : public pdsp::Patchable {
     
         // Launch a specific sequence when a key command is received. 
         void launchSequence(int key);
+        void drawGui();
 
     private:
         ofxPDSPEngine engine;
         vector<pdsp::Sequence> sequences;
         vector<TouchOscillator> oscs;
         vector<TouchLFO> lfos;
+    
+        // GUI handles.
+        ofxPanel gui;
+        vector<ofxPDSPValue> lfo_ctrls; 
+        ofParameterGroup lfo_group;
+    
+        void initSequencerGui();
 };

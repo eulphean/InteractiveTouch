@@ -33,6 +33,9 @@ void ofApp::update(){
 
 //--------------------------------------------------------------
 void ofApp::draw(){
+  // Draw GUI for the sequencer.
+  sequencer.drawGui();
+  
   // Draw each connection on the screen.
   for (int i = 0; i < connections.size(); i++) {
     connections[i].draw();
