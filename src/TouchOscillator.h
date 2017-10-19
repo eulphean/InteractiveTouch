@@ -28,4 +28,6 @@ class TouchOscillator : public pdsp::Patchable{
         pdsp::Amp amp;
         pdsp::VAOscillator osc;
         pdsp::ADSR env;
+        pdsp::CRSlew ampSlew;
+        pdsp::CRSlew pitchSlew;
 };

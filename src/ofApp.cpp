@@ -20,7 +20,7 @@ void ofApp::update(){
   
   // If the connections increase a certain number, empty the array
   // and clear the screen.
-  if (connections.size() > maxConnections) {
+  if (connections.size() > 2) {
   
     // Save the last connection.
     Connection lastConnection = connections.at(connections.size() - 1);

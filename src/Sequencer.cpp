@@ -25,28 +25,30 @@ Sequencer::Sequencer() {
     for (int i = 0; i < maxSections; i++) {
         engine.score.sections[i].out_trig(0) >> oscs[i].in_trig(); // first output is patched to envelope
         engine.score.sections[i].out_value(1) >> oscs[i].in_pitch(); // second output is patched to pitch
+        // Smoothen each section.
+        //engine.score.sections[i].out_value(1).enableSmoothing(100.0f);
     }
     
     // Sequences for individual sections. 
     float o = -1.0f;
     sequences[0].set(
       { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
-        { 70.0f, o, o, 75.0f, o, o, 80.0f, o }}, // out 1 = pitch
+        { 60.0f, o, o, 63.0f, o, o, 70.0f, o }}, // out 1 = pitch
                  16.0, 1.0 );
     
     sequences[1].set(
       { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
-        { 55.0f, o, o, 30.0f, o, o, 45.0f, o }}, // out 1 = pitch
+        { 55.0f, 30.0f, o, o, o, o, 45.0f, o }}, // out 1 = pitch
                  16.0, 1.0 );
     
     sequences[2].set(
-      { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
+      { { o, o, o, 1.0f , o, o, o, o },  // out 0 = gate
         { o, 50.0f, o, o, o, 65.0f, o, o }}, // out 1 = pitch
                  16.0, 1.0 );
     
     sequences[3].set(
-      { { 1.0f, o, o, 1.0f , o, o, o, 1.0f },  // out 0 = gate
-        { 60.f, o, o, 55.0f, o, o, o, 50.0f}}, // out 1 = pitch
+     { { o, 1.0f, o, o , o, o, o, o },  // out 0 = gate
+        { 65.0f, o, o, o, o, o, 55.0f, o }}, // out 1 = pitch
                  16.0, 1.0 );
     
     // Assign a sequence to a section and a cell.
@@ -61,8 +63,8 @@ Sequencer::Sequencer() {
     }
     
     // Every oscillator's output.
-    oscs[0].out_sin() * 0.3f >> engine.audio_out(0);
-    oscs[0].out_sin() * 0.3f >> engine.audio_out(1);
+    oscs[0].out_sin() * 0.5f >> engine.audio_out(0);
+    oscs[0].out_sin() * 0.5f >> engine.audio_out(1);
     
     oscs[1].out_sin() * 0.5f >> engine.audio_out(0);
     oscs[1].out_sin() * 0.5f >> engine.audio_out(1);
@@ -70,8 +72,8 @@ Sequencer::Sequencer() {
     oscs[2].out_sin() * 0.5f >> engine.audio_out(0);
     oscs[2].out_sin() * 0.5f >> engine.audio_out(1);
     
-    oscs[3].out_sin() * 0.5f >> engine.audio_out(0);
-    oscs[3].out_sin() * 0.5f >> engine.audio_out(1);
+    oscs[3].out_sin() * 0.2f >> engine.audio_out(0);
+    oscs[3].out_sin() * 0.2f >> engine.audio_out(1);
 
     // Initialize Gui
     initSequencerGui();
@@ -104,13 +106,14 @@ void Sequencer::drawGui() {
 // Based on the input received from the Makey, we will launch a sequence.
 void Sequencer::launchSequence(int key, int numOfConnections) {
     // Turn off all the cells.
-    if (numOfConnections > 4) {
-        for (int i = 0; i < maxSections; i++) {
+    if (numOfConnections > 2) {
+        for (int i = 0; i < 2; i++) {
             engine.score.sections[i].launchCell(-1);
         }
     }
     
     // Cycle through each sequence one by one
-    sequenceIdx = (sequenceIdx + 1) % 4;
-    engine.score.sections[sequenceIdx].launchCell(0, true, 1/4.0f);
+    sequenceIdx = (sequenceIdx) % 2;
+    engine.score.sections[sequenceIdx].launchCell(0);
+    sequenceIdx++;
 }

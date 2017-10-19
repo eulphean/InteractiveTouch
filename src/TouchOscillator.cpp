@@ -16,7 +16,11 @@ void TouchOscillator::patch() {
     addModuleOutput("signal", amp); // if in/out is not selected default in/out is used
     
     // Patching
-    env.set(0.0f, 50.0f, 1.0f, 50.0f) >> amp.in_mod();
+    env.set(40.0f, 100.0f, 1.0f, 200.0f) >> amp.in_mod();
+
+    // Do this for enabling smoothing.
+    pitchSlew.set(500.0f) >> osc.in_pitch(); // 250 millisecond slew
+    ampSlew.set(100.0f)  >> amp.in_mod(); // 100 millisecond slew
     
     // Default output patched is a sine wave.
     osc.out_sine() >> amp;
