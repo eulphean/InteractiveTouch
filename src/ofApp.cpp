@@ -9,6 +9,10 @@ void ofApp::setup(){
   // Smoothen the updates between each frame.
   ofSetFrameRate(40);
   ofSetVerticalSync(true);
+  
+  lastKey = -1;
+  touchDuration = 0.0f;
+  lastKeyPressTime = 0.0f;
 }
 
 //--------------------------------------------------------------
@@ -47,17 +51,34 @@ void ofApp::draw(){
   for (int i = 0; i < connections.size(); i++) {
     connections[i].draw();
   }
+  
+  ofDrawBitmapString(to_string(touchDuration/1000), 200, 200);
 }
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
   // Key pressed?
   if (key) {
-    // Launch the correct sequence for this command.
-    sequencer.launchSequence(key, connections.size() + 1);
     
-    // Create a new connection and add it to the collection.
-    Connection c;
-    connections.push_back(c);
+    // Calculate the time elapsed since last key press time.
+    float timeElapsed = ofGetElapsedTimeMillis() - lastKeyPressTime;
+    
+    if (key == lastKey && timeElapsed < 500) {
+        touchDuration += timeElapsed;
+    } else {
+        // New command received. Launch sequence.
+        sequencer.launchSequence(key, connections.size() + 1);
+        
+        // Create a new connection and add it to the collection.
+        Connection c;
+        connections.push_back(c);
+        
+        // Save this key as lastKey to be used to detect the touch duration.
+        lastKey = key;
+        touchDuration = 0;
+    }
+    
+    // Store the time at which this key press happened.
+    lastKeyPressTime = ofGetElapsedTimeMillis();
   }
 }

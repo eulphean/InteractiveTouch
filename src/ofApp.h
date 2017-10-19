@@ -6,24 +6,28 @@
 #include "Sequencer.h"
 
 class ofApp : public ofBaseApp {
-	public:
-    
+public:
     // ---------------- Constants -----------------------
     const int maxConnections = 4;
-    
+
     // ---------------- Members -----------------------
-    
+
     // Collection of Connections.
     vector<Connection> connections;
-    
+
     // PDSP handler.
     Sequencer sequencer;
-  
+
     // ---------------- Methods -----------------------
     void setup();
-		void update();
-		void draw();
-  
+    void update();
+    void draw();
+
     // Events received by the Makey.
-		void keyPressed(int key);
+    void keyPressed(int key);
+
+private:
+    int lastKey;
+    float touchDuration;
+    float lastKeyPressTime;
 };
