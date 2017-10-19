@@ -37,8 +37,8 @@ Sequencer::Sequencer() {
                  16.0, 1.0 );
     
     sequences[1].set(
-      { { 1.0f, o, o, o , o, o, o, o },  // out 0 = gate
-        { 55.0f, 30.0f, o, o, o, o, 45.0f, o }}, // out 1 = pitch
+      { { 1.0f, o, o, o , 1.0f, o, o, o },  // out 0 = gate
+        { 70.0f, o, o, 75.0f, o, 73.0f, o, 78.0f }}, // out 1 = pitch
                  16.0, 1.0 );
     
     sequences[2].set(
@@ -59,7 +59,7 @@ Sequencer::Sequencer() {
     
     // LFO for each oscillator.
     for (int i = 0; i < maxSections; i++) {
-        lfos[i].out_triangle() * 0.5 >> oscs[i].in_pitch();
+        lfos[i].out_square() * 0.5 >> oscs[i].in_pitch();
     }
     
     // Every oscillator's output.
@@ -116,4 +116,8 @@ void Sequencer::launchSequence(int key, int numOfConnections) {
     sequenceIdx = (sequenceIdx) % 2;
     engine.score.sections[sequenceIdx].launchCell(0);
     sequenceIdx++;
+}
+
+void Sequencer::updateLFOFreq(float freq) {
+    freq >> lfos[sequenceIdx-1].in_freq();
 }

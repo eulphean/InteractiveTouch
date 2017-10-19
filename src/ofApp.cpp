@@ -65,6 +65,8 @@ void ofApp::keyPressed(int key){
     
     if (key == lastKey && timeElapsed < 500) {
         touchDuration += timeElapsed;
+        float freq = ofMap(touchDuration, 0, 10000, 0.0f, 10.0f);
+        sequencer.updateLFOFreq(freq);
     } else {
         // New command received. Launch sequence.
         sequencer.launchSequence(key, connections.size() + 1);

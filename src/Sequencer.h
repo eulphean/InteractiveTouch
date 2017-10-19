@@ -23,6 +23,7 @@ class Sequencer : public pdsp::Patchable {
         // Launch a specific sequence when a key command is received. 
         void launchSequence(int key, int numOfConnections);
         void drawGui();
+        void updateLFOFreq(float freq);
 
     private:
         ofxPDSPEngine engine;
