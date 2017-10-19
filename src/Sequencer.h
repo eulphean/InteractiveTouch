@@ -35,5 +35,7 @@ class Sequencer : public pdsp::Patchable {
         vector<ofxPDSPValue> lfo_ctrls; 
         ofParameterGroup lfo_group;
     
+        int sequenceIdx = 0;
+    
         void initSequencerGui();
 };

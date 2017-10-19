@@ -110,7 +110,7 @@ void Sequencer::launchSequence(int key, int numOfConnections) {
         }
     }
     
-    // Pop a sequence at random for every keypress.
-    int sectionIdx = ofRandom(0, 3);
-    engine.score.sections[sectionIdx].launchCell(0, true, 1/4.0f);
+    // Cycle through each sequence one by one
+    sequenceIdx = (sequenceIdx + 1) % 4;
+    engine.score.sections[sequenceIdx].launchCell(0, true, 1/4.0f);
 }
