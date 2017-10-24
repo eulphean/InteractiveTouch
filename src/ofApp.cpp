@@ -67,12 +67,15 @@ void ofApp::keyPressed(int key){
         touchDuration += timeElapsed;
         float freq = ofMap(touchDuration, 0, 10000, 0.0f, 10.0f);
         sequencer.updateLFOFreq(freq);
+        
+        // Call update
     } else {
         // New command received. Launch sequence.
         sequencer.launchSequence(key, connections.size() + 1);
         
         // Create a new connection and add it to the collection.
-        Connection c;
+        // Every connection has a key associated with it. 
+        Connection c(key);
         connections.push_back(c);
         
         // Save this key as lastKey to be used to detect the touch duration.

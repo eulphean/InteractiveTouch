@@ -11,13 +11,16 @@
 class Connection {
   
 	public:
-    Connection();
+    Connection(int key);
     
-		void update();
-		void draw();
-  
+    const int radiusIncrement = 2;
+    
     // Connection variables to define visual state.
     ofPoint position;
     int radius;
     ofColor color;
+    int connectionKey;
+    
+		void update();
+		void draw();
 };
