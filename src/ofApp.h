@@ -14,7 +14,7 @@ public:
     // ---------------- Members -----------------------
 
     // Collection of Connections.
-    map<int, Connection> connections;
+    map<int, Connection*> connections;
 
     // PDSP handler.
     Sequencer sequencer;
@@ -23,6 +23,8 @@ public:
     void setup();
     void update();
     void draw();
+  
+    void clearConnections();
 
     // Events received by the Makey.
     void keyPressed(int key);

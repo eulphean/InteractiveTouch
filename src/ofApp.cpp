@@ -22,7 +22,7 @@ void ofApp::setup(){
 void ofApp::update(){
   // Update each connection.
   for (auto itr = connections.begin(); itr != connections.end(); itr++) {
-    itr->second.update();
+    itr->second->update();
   }
 }
 
@@ -33,7 +33,7 @@ void ofApp::draw(){
   
   // Draw each connection on the screen.
   for (auto itr = connections.begin(); itr != connections.end(); itr++) {
-    itr->second.draw();
+    itr->second->draw();
   }
   
   //ofDrawBitmapString(to_string(touchDuration/1000), 200, 200);
@@ -57,16 +57,15 @@ void ofApp::keyPressed(int key){
       
         // Calculate new radius to be added, update the connection.
         int lengthToBeAdded = ofMap(touchDuration, 0, 120000, 0, ofGetHeight(), true);
-        Connection c = connections[key];
-        if (c.dimensions.y < ofGetHeight()) {
-          c.extendConnection(lengthToBeAdded);
-          connections[key] = c;
+        Connection *c = connections[key];
+        if (c -> dimensions.y < ofGetHeight()) {
+          c -> extendConnection(lengthToBeAdded);
+          //connections[key] = c;
         }
     } else {
-        // Clear CoNnections map if we already have maxConnections.
-        // Then process a new connection.
+        // Stop the sequencer when we reach maxConnections.
+        // Then process new connections.
         if (connections.size() == maxConnections) {
-            //connections.clear();
             sequencer.stopSequence();
         }
           
@@ -74,16 +73,17 @@ void ofApp::keyPressed(int key){
         sequencer.launchSequence();
       
         // Create a new connection and add it to the collection.
-        Connection c (currentConnectionX);
+        Connection *c = new Connection(currentConnectionX);
         connections[key] = c;
       
         // Update currentConnectionX
         currentConnectionX += nextConnectionOffset;
       
         // Screen full of connections? Reset to the width of the screen.
+        // Clear all the connections as well.
         if (currentConnectionX >= ofGetWidth()) {
-            // Clear the screen.
             currentConnectionX = 0;
+            clearConnections();
         }
         
         // Save this key as lastKey to detect the touch duration.
@@ -94,4 +94,14 @@ void ofApp::keyPressed(int key){
     // Store the time at which this key press happened.
     lastKeyPressTime = ofGetElapsedTimeMillis();
   }
+}
+
+void ofApp::clearConnections() {
+  // Deallocate the dynamically allocated connections.
+  for (auto itr = connections.begin(); itr != connections.end(); itr++) {
+    delete itr->second;
+  }
+  
+  // Clear the map completely. 
+  connections.clear();
 }
