@@ -45,7 +45,7 @@ void ofApp::keyPressed(int key){
   if (key) {
   
     // Calculate the time elapsed since last key press time.
-    float timeElapsed = ofGetElapsedTimeMillis() - lastKeyPressTime;
+    uint64_t timeElapsed = ofGetElapsedTimeMillis() - lastKeyPressTime;
     
     if (key == lastKey && timeElapsed < 700) {
         // New touch duration.

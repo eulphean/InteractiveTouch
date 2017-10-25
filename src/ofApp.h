@@ -31,7 +31,9 @@ public:
 
 private:
     int lastKey;
-    float touchDuration;
-    float lastKeyPressTime;
+  
+    // Use 64-bit unsigned integer to represent a really big time.
+    uint64_t touchDuration;
+    uint64_t lastKeyPressTime;
     int currentConnectionX;
 };
