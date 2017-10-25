@@ -11,30 +11,35 @@
 class Connection {
   
 	public:
-    Connection();
+    int radius;
     
+    Connection();
+  
+    // Copy constructor.
     Connection(const Connection &obj) {
         position = obj.position;
         radius = obj.radius;
         color = obj.color;
     };
-    
+  
+    // Overload = operator.
     Connection& operator=(const Connection &con) {
         this -> position = con.position;
         this -> radius = con.radius;
         this -> color = con.color;
         return *this;
     }
-    
-    
-    
+  
+    // Destructor.
     ~Connection() {};
-    
-    // Connection variables to define visual state.
-    ofPoint position;
-    int radius;
-    ofColor color;
     
 		void update();
 		void draw();
+    void extendConnection(float radiusToBeAdded);
+  
+  private:
+    // Connection variables to define visual state.
+    ofPoint position;
+    ofColor color;
+  
 };

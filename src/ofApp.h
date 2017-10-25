@@ -8,7 +8,7 @@
 class ofApp : public ofBaseApp {
 public:
     // ---------------- Constants -----------------------
-    const int maxConnections = 4;
+    const int maxConnections = 2;
 
     // ---------------- Members -----------------------
 

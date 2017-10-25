@@ -5,6 +5,7 @@ using namespace std;
 //--------------------------------------------------------------
 void ofApp::setup(){
   ofBackground(0);
+  ofSetCircleResolution(60);
   
   // Smoothen the updates between each frame.
   ofSetFrameRate(40);
@@ -38,22 +39,36 @@ void ofApp::draw(){
 
 //--------------------------------------------------------------
 void ofApp::keyPressed(int key){
-  if (connections.size() == 2) {
-      // That means it's a new connection after the second connection.
-      connections.clear();
-      sequencer.stopSequence();
-  }
-   
-  // Key pressed?
+  // Key pressed.
   if (key) {
+  
     // Calculate the time elapsed since last key press time.
     float timeElapsed = ofGetElapsedTimeMillis() - lastKeyPressTime;
     
     if (key == lastKey && timeElapsed < 500) {
+        // New touch duration.
         touchDuration += timeElapsed;
+      
+        // Calculate new frequency and update LFO envelope in the sequencer.
         float freq = ofMap(touchDuration, 0, 10000, 0.0f, 10.0f);
         sequencer.updateLFOFreq(freq);
+      
+        // Calculate new radius to be added, update the connection.
+        float radiusToBeAdded = ofMap(touchDuration, 0, 10000, 0.0f, 20.0f, true);
+        Connection c = connections[key];
+        if (c.radius < 80) {
+          c.extendConnection(radiusToBeAdded);
+          connections[key] = c;
+        }
+      
     } else {
+        // Clear Connections map if we already have maxConnections.
+        // Then process a new connection.
+        if (connections.size() == maxConnections) {
+            connections.clear();
+            sequencer.stopSequence();
+        }
+          
         // New command received. Launch sequence.
         sequencer.launchSequence();
        
@@ -61,7 +76,7 @@ void ofApp::keyPressed(int key){
         Connection c;
         connections[key] = c;
         
-        // Save this key as lastKey to be used to detect the touch duration.
+        // Save this key as lastKey to detect the touch duration.
         lastKey = key;
         touchDuration = 0;
     }
