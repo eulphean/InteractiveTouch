@@ -6,9 +6,8 @@
 
 using namespace std;
 
-Connection::Connection(int key) {
+Connection::Connection() {
   // Visual properties of the connection.
-  connectionKey = key; 
   radius = ofRandom(10, 50);
   position.x = ofRandom(radius, ofGetWidth() - radius);
   position.y = ofRandom(radius, ofGetHeight() - radius);

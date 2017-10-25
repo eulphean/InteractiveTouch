@@ -11,15 +11,29 @@
 class Connection {
   
 	public:
-    Connection(int key);
+    Connection();
     
-    const int radiusIncrement = 2;
+    Connection(const Connection &obj) {
+        position = obj.position;
+        radius = obj.radius;
+        color = obj.color;
+    };
+    
+    Connection& operator=(const Connection &con) {
+        this -> position = con.position;
+        this -> radius = con.radius;
+        this -> color = con.color;
+        return *this;
+    }
+    
+    
+    
+    ~Connection() {};
     
     // Connection variables to define visual state.
     ofPoint position;
     int radius;
     ofColor color;
-    int connectionKey;
     
 		void update();
 		void draw();

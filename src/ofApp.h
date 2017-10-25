@@ -13,7 +13,7 @@ public:
     // ---------------- Members -----------------------
 
     // Collection of Connections.
-    vector<Connection> connections;
+    map<int, Connection> connections;
 
     // PDSP handler.
     Sequencer sequencer;

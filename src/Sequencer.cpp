@@ -103,15 +103,15 @@ void Sequencer::drawGui() {
     gui.draw();
 }
 
-// Based on the input received from the Makey, we will launch a sequence.
-void Sequencer::launchSequence(int key, int numOfConnections) {
-    // Turn off all the cells.
-    if (numOfConnections > 2) {
-        for (int i = 0; i < 2; i++) {
-            engine.score.sections[i].launchCell(-1);
-        }
+void Sequencer::stopSequence() {
+    // Stop all the cells.
+    for (int i = 0; i < 2; i++) {
+        engine.score.sections[i].launchCell(-1);
     }
-    
+}
+
+// Based on the input received from the Makey, we will launch a sequence.
+void Sequencer::launchSequence() {
     // Cycle through each sequence one by one
     sequenceIdx = (sequenceIdx) % 2;
     engine.score.sections[sequenceIdx].launchCell(0);
