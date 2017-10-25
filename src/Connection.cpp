@@ -8,8 +8,7 @@ using namespace std;
 
 Connection::Connection(int currentConnectionX) {
   // Connection's position.
-  //currentConnectionX -= defaultConnectionWidth;
-  position.x = currentConnectionX - defaultConnectionWidth;
+  position.x = currentConnectionX;
   position.y = defaultConnectionY;
   
   // Connection's color.

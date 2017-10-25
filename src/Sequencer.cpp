@@ -100,7 +100,7 @@ void Sequencer::initSequencerGui() {
 }
 
 void Sequencer::drawGui() {
-    gui.draw();
+   // gui.draw();
 }
 
 void Sequencer::stopSequence() {
