@@ -11,22 +11,33 @@
 class Connection {
   
 	public:
-    int radius;
+    // We always want our rectangles to begin at y = 0 and extrude from there. 
+    const int defaultConnectionY = 0;
+    const int defaultConnectionWidth = 20;
+    const int defaultConnectionHeight = 40;
+  
+    // Length and width of the rectangle.
+    ofVec2f dimensions;
+  
+    // --------------------- Public methods ---------------------------------
+    Connection() {
     
-    Connection();
+    }
+    
+    Connection(int currentConnectionX);
   
     // Copy constructor.
-    Connection(const Connection &obj) {
-        position = obj.position;
-        radius = obj.radius;
-        color = obj.color;
+    Connection(const Connection &con) {
+        position = con.position;
+        color = con.color;
+        dimensions = con.dimensions;
     };
   
     // Overload = operator.
     Connection& operator=(const Connection &con) {
         this -> position = con.position;
-        this -> radius = con.radius;
         this -> color = con.color;
+        this -> dimensions = con.dimensions;
         return *this;
     }
   
@@ -35,11 +46,10 @@ class Connection {
     
 		void update();
 		void draw();
-    void extendConnection(float radiusToBeAdded);
+    void extendConnection(int radiusToBeAdded);
   
   private:
     // Connection variables to define visual state.
     ofPoint position;
     ofColor color;
-  
 };

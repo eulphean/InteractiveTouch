@@ -6,12 +6,18 @@
 
 using namespace std;
 
-Connection::Connection() {
-  // Visual properties of the connection.
-  radius = ofRandom(10, 20);
-  position.x = ofRandom(radius, ofGetWidth() - radius);
-  position.y = ofRandom(radius, ofGetHeight() - radius);
+Connection::Connection(int currentConnectionX) {
+  // Connection's position.
+  //currentConnectionX -= defaultConnectionWidth;
+  position.x = currentConnectionX - defaultConnectionWidth;
+  position.y = defaultConnectionY;
+  
+  // Connection's color.
   color = ofColor::fromHsb(ofRandom(255), 255, 255);
+  
+  // Connection's default height and width. 
+  dimensions.x = defaultConnectionWidth;
+  dimensions.y = defaultConnectionHeight; 
 }
 
 void Connection::update() {
@@ -21,9 +27,9 @@ void Connection::update() {
 void Connection::draw() {
   ofSetColor(color);
   ofFill();
-  ofDrawCircle(position, radius);
+  ofDrawRectangle(position.x, position.y, dimensions.x, dimensions.y);
 }
 
-void Connection::extendConnection(float radiusToBeAdded) {
-  radius += radiusToBeAdded;
+void Connection::extendConnection(int lengthToBeAdded) {
+  dimensions.y += lengthToBeAdded;
 }

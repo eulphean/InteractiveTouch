@@ -9,6 +9,7 @@ class ofApp : public ofBaseApp {
 public:
     // ---------------- Constants -----------------------
     const int maxConnections = 2;
+    const int nextConnectionOffset = 35;
 
     // ---------------- Members -----------------------
 
@@ -30,4 +31,5 @@ private:
     int lastKey;
     float touchDuration;
     float lastKeyPressTime;
+    int currentConnectionX;
 };

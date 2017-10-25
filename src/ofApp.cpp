@@ -14,6 +14,8 @@ void ofApp::setup(){
   lastKey = -1;
   touchDuration = 0.0f;
   lastKeyPressTime = 0.0f;
+  
+  currentConnectionX = ofGetWidth();
 }
 
 //--------------------------------------------------------------
@@ -54,27 +56,34 @@ void ofApp::keyPressed(int key){
         sequencer.updateLFOFreq(freq);
       
         // Calculate new radius to be added, update the connection.
-        float radiusToBeAdded = ofMap(touchDuration, 0, 10000, 0.0f, 20.0f, true);
+        int lengthToBeAdded = ofMap(touchDuration, 0, 60000, 0, ofGetHeight(), true);
         Connection c = connections[key];
-        if (c.radius < 80) {
-          c.extendConnection(radiusToBeAdded);
+        if (c.dimensions.y < ofGetHeight()) {
+          c.extendConnection(lengthToBeAdded);
           connections[key] = c;
         }
-      
     } else {
         // Clear Connections map if we already have maxConnections.
         // Then process a new connection.
         if (connections.size() == maxConnections) {
-            connections.clear();
+            //connections.clear();
             sequencer.stopSequence();
         }
           
         // New command received. Launch sequence.
         sequencer.launchSequence();
-       
+      
         // Create a new connection and add it to the collection.
-        Connection c;
+        Connection c (currentConnectionX);
         connections[key] = c;
+      
+        // Update currentConnectionX
+        currentConnectionX -= nextConnectionOffset;
+      
+        // Screen full of connections? Reset to the width of the screen.
+        if (currentConnectionX <= 0) {
+            currentConnectionX = ofGetWidth();
+        }
         
         // Save this key as lastKey to detect the touch duration.
         lastKey = key;
