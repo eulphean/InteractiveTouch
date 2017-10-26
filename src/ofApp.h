@@ -28,12 +28,14 @@ public:
 
     // Events received by the Makey.
     void keyPressed(int key);
+    void keyReleased(int key);
 
 private:
     int lastKey;
   
     // Use 64-bit unsigned integer to represent a really big time.
-    uint64_t touchDuration;
-    uint64_t lastKeyPressTime;
     int currentConnectionX;
+  
+    // Map of keys and times they were pressed.
+    map<int, uint64_t> keysPressed;
 };

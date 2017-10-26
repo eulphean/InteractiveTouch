@@ -11,10 +11,6 @@ void ofApp::setup(){
   ofSetFrameRate(40);
   ofSetVerticalSync(true);
   
-  lastKey = -1;
-  touchDuration = 0.0f;
-  lastKeyPressTime = 0.0f;
-  
   currentConnectionX = 0;
 }
 
@@ -23,6 +19,52 @@ void ofApp::update(){
   // Update each connection.
   for (auto itr = connections.begin(); itr != connections.end(); itr++) {
     itr->second->update();
+  }
+  
+  // Stop the sequencer when we reach maxConnections.
+  // Then process new connections.
+ /* if (connections.size() == maxConnections) {
+      sequencer.stopSequence();
+  } */
+  
+  for (auto itr = keysPressed.begin(); itr != keysPressed.end(); itr++) {
+    int key = itr->first;
+    
+    // Does a Connection exist for this key? No, create a new connection.
+    if (connections.find(key) == connections.end()) {
+        // New command received. Launch sequence.
+        sequencer.launchSequence();
+      
+        // Create a new connection and add it to the collection.
+        Connection *c = new Connection(currentConnectionX);
+        connections[key] = c;
+      
+        // Update currentConnectionX
+        currentConnectionX += nextConnectionOffset;
+      
+        // Screen full of connections? Reset to 0.
+        // Clear all the connections as well.
+        if (currentConnectionX >= ofGetWidth()) {
+            currentConnectionX = 0;
+            clearConnections();
+        }
+    } else {
+      // Calculate the elapsed time for this key.
+      uint64_t touchDuration = ofGetElapsedTimeMillis() - itr->second;
+      
+      if (touchDuration > 0) {
+        // Calculate new frequency and update LFO envelope in the sequencer.
+        float freq = ofMap(touchDuration, 0, 10000, 0.0f, 10.0f);
+        sequencer.updateLFOFreq(freq);
+      
+        // Calculate the new length of the rectangle to be added. 
+        int lengthToBeAdded = ofMap(touchDuration, 0, 120000, 0, ofGetHeight(), true);
+        Connection *c = connections[key];
+        if (c -> dimensions.y < ofGetHeight()) {
+          c -> extendConnection(lengthToBeAdded);
+        }
+      }
+    }
   }
 }
 
@@ -40,60 +82,16 @@ void ofApp::draw(){
 }
 
 //--------------------------------------------------------------
+
 void ofApp::keyPressed(int key){
-  // Key pressed.
-  if (key) {
-  
-    // Calculate the time elapsed since last key press time.
-    uint64_t timeElapsed = ofGetElapsedTimeMillis() - lastKeyPressTime;
-    
-    if (key == lastKey && timeElapsed < 700) {
-        // New touch duration.
-        touchDuration += timeElapsed;
-      
-        // Calculate new frequency and update LFO envelope in the sequencer.
-        float freq = ofMap(touchDuration, 0, 10000, 0.0f, 10.0f);
-        sequencer.updateLFOFreq(freq);
-      
-        // Calculate new radius to be added, update the connection.
-        int lengthToBeAdded = ofMap(touchDuration, 0, 120000, 0, ofGetHeight(), true);
-        Connection *c = connections[key];
-        if (c -> dimensions.y < ofGetHeight()) {
-          c -> extendConnection(lengthToBeAdded);
-          //connections[key] = c;
-        }
-    } else {
-        // Stop the sequencer when we reach maxConnections.
-        // Then process new connections.
-        if (connections.size() == maxConnections) {
-            sequencer.stopSequence();
-        }
-          
-        // New command received. Launch sequence.
-        sequencer.launchSequence();
-      
-        // Create a new connection and add it to the collection.
-        Connection *c = new Connection(currentConnectionX);
-        connections[key] = c;
-      
-        // Update currentConnectionX
-        currentConnectionX += nextConnectionOffset;
-      
-        // Screen full of connections? Reset to the width of the screen.
-        // Clear all the connections as well.
-        if (currentConnectionX >= ofGetWidth()) {
-            currentConnectionX = 0;
-            clearConnections();
-        }
-        
-        // Save this key as lastKey to detect the touch duration.
-        lastKey = key;
-        touchDuration = 0;
-    }
-    
-    // Store the time at which this key press happened.
-    lastKeyPressTime = ofGetElapsedTimeMillis();
+  // Add the key in the map if it doesn't exist.
+  if (keysPressed.find(key) == keysPressed.end()) {
+    keysPressed[key] = ofGetElapsedTimeMillis();
   }
+}
+
+void ofApp::keyReleased(int key) {
+  keysPressed.erase(key);
 }
 
 void ofApp::clearConnections() {
