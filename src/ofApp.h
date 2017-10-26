@@ -9,7 +9,7 @@ class ofApp : public ofBaseApp {
 public:
     // ---------------- Constants -----------------------
     const int maxConnections = 2;
-    const int nextConnectionOffset = 35;
+    const int nextConnectionOffset = 45;
 
     // ---------------- Members -----------------------
 

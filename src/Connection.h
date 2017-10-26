@@ -13,7 +13,7 @@ class Connection {
 	public:
     // We always want our rectangles to begin at y = 0 and extrude from there. 
     const int defaultConnectionY = 0;
-    const int defaultConnectionWidth = 20;
+    const int defaultConnectionWidth = 30;
     const int defaultConnectionHeight = 40;
   
     // Length and width of the rectangle.

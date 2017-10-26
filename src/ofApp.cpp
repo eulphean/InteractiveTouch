@@ -21,17 +21,19 @@ void ofApp::update(){
     itr->second->update();
   }
   
-  // Stop the sequencer when we reach maxConnections.
-  // Then process new connections.
- /* if (connections.size() == maxConnections) {
-      sequencer.stopSequence();
-  } */
-  
+  // We will use the elapsedTime associated with a key as the "key" for
+  // connections data structure.
   for (auto itr = keysPressed.begin(); itr != keysPressed.end(); itr++) {
-    int key = itr->first;
+    int key = itr->second;
     
     // Does a Connection exist for this key? No, create a new connection.
     if (connections.find(key) == connections.end()) {
+        // Stop the sequencer when we reach maxConnections.
+        // Then process new connections.
+        if (connections.size() == maxConnections) {
+            sequencer.stopSequence();
+        }
+      
         // New command received. Launch sequence.
         sequencer.launchSequence();
       
@@ -50,7 +52,7 @@ void ofApp::update(){
         }
     } else {
       // Calculate the elapsed time for this key.
-      uint64_t touchDuration = ofGetElapsedTimeMillis() - itr->second;
+      uint64_t touchDuration = ofGetElapsedTimeMillis() - key;
       
       if (touchDuration > 0) {
         // Calculate new frequency and update LFO envelope in the sequencer.
@@ -58,7 +60,7 @@ void ofApp::update(){
         sequencer.updateLFOFreq(freq);
       
         // Calculate the new length of the rectangle to be added. 
-        int lengthToBeAdded = ofMap(touchDuration, 0, 120000, 0, ofGetHeight(), true);
+        int lengthToBeAdded = ofMap(touchDuration, 0, 500000, 0, ofGetHeight(), true);
         Connection *c = connections[key];
         if (c -> dimensions.y < ofGetHeight()) {
           c -> extendConnection(lengthToBeAdded);
